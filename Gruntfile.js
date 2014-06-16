@@ -4,6 +4,7 @@ var haml = require('haml'),
 
 module.exports = function(grunt) {
 	grunt.initConfig({
+		buildDir: 'build',
 		pkg: grunt.file.readJSON('package.json'),
 		watch: {
 			haml: {
@@ -19,24 +20,25 @@ module.exports = function(grunt) {
 
 	grunt.loadNpmTasks('grunt-contrib-watch');
 
-	grunt.task.registerTask('clean', 'delete target director', function() {
-		grunt.file.delete('target');
+	grunt.task.registerTask('clean', 'Delete build director', function() {
+		grunt.file.delete(grunt.config.get('buildDir'));
 	});
 
-	grunt.task.registerTask('copy:html', 'copy html files', function() {
+	grunt.task.registerTask('copy:html', 'Copy html files', function() {
 		grunt.file.recurse('html', function(path) {
-			grunt.file.copy(path, path.replace(/^html/, 'target'));
+			grunt.file.copy(path, path.replace(/^html/, grunt.config.get('buildDir')));
 		});
 	});
 
-	grunt.task.registerTask('copy:dependencies', 'move bower dependencies', function() {
-		grunt.file.copy('bower_components/requirejs/require.js', 'target/js/lib/require.js');
-		grunt.file.copy('bower_components/backbone/backbone.js', 'target/js/lib/backbone.js');
-		grunt.file.copy('bower_components/lodash/dist/lodash.js', 'target/js/lib/lodash.js');
-		grunt.file.copy('bower_components/jquery/dist/jquery.js', 'target/js/lib/jquery.js');
+	grunt.task.registerTask('copy:dependencies', 'Copy bower dependencies', function() {
+		var buildDir = grunt.config.get('buildDir');
+		grunt.file.copy('bower_components/requirejs/require.js', buildDir + '/js/lib/require.js');
+		grunt.file.copy('bower_components/backbone/backbone.js', buildDir + '/js/lib/backbone.js');
+		grunt.file.copy('bower_components/underscore/underscore.js', buildDir + '/js/lib/underscore.js');
+		grunt.file.copy('bower_components/jquery/dist/jquery.js', buildDir + '/js/lib/jquery.js');
 	});
 
-	grunt.task.registerTask('compile:haml', 'compile haml templates', function() {
+	grunt.task.registerTask('compile:haml', 'Compile haml templates', function() {
 		grunt.file.recurse('haml', function(path) {
 			if(!/\.haml$/.test(path)) {
 					return;
@@ -45,13 +47,26 @@ module.exports = function(grunt) {
 				return '  ';
 			});
 			var js = haml.optimize(haml.compile(lines));
-			var amdjs = 'define(' + js.replace(/^\(|\).call\(this\)$/g, '') + ');';
+			var amdjs = '\
+				define(function(locals) {\
+					return function(locals) {\
+						with(locals || {}) {\
+							try {\
+								var _$output;\
+								_$output = ' + js + ';\
+								return _$output;\
+							} catch (e) {\
+								return "<pre class=\\"error\\">" + e.stack + "</pre>";\
+							}\
+						}\
+					};\
+				});'
 			var targetPath = path.replace(/^haml|haml$/g, '');
-			grunt.file.write('target/js/template/' + targetPath + 'js', amdjs);
+			grunt.file.write(grunt.config.get('buildDir') + '/js/template/' + targetPath + 'js', amdjs);
 		});
 	});
 
-	grunt.task.registerTask('compile:coffee', 'compile coffee', function() {
+	grunt.task.registerTask('compile:coffee', 'Compile coffee', function() {
 		grunt.file.recurse('coffee', function(path) {
 			if(!/\.coffee$/.test(path)) {
 				return;
@@ -59,7 +74,7 @@ module.exports = function(grunt) {
 			var lines = '' + fs.readFileSync(path);
 			var js = coffee.compile(lines);
 			var targetPath = path.replace(/^coffee|coffee$/g, 'js');
-			grunt.file.write('target/' + targetPath, js);
+			grunt.file.write(grunt.config.get('buildDir') + '/' + targetPath, js);
 		});
 	});
 

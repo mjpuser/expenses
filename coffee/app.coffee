@@ -1,7 +1,7 @@
 define [
 	'router',
 	'backbone',
-	'loadsh'
+	'underscore'
 ], (
 	router,
 	Backbone,
@@ -28,12 +28,15 @@ define [
 			require([ path ], load.success, load.error)
 
 		main: ->
-			this.router.on 'route:change', (path) ->
-				app.loadPage(path)
+			router.on 'route:change', (path) ->
+				app.loadPath(path)
 
 			Backbone.history.start()
 
 		router: router
+		$: Backbone.$
+		Backbone: Backbone
+		_: _
 
 	_.extend(app, Backbone.Events)
 
