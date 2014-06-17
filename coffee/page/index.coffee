@@ -1,14 +1,18 @@
 define [
-	'app',
+	'page/base',
 	'template/page/index',
+	'view/expense/form'
 ], (
-	app,
-	template
-)->
-	Page = ->
-		console.log('new page')
+	Page,
+	template,
+	Form
+) ->
+	IndexPage = Page.extend
+		initialize: (options) ->
+			Page::initialize.call this, options
+			@template ?= template
+			@views =
+				form: Form
 
-	Page::render = ->
-		app.$(document.body).html(template({graphs: ['1 ', '2 ', '> 3']}))
 
-	new Page
+	IndexPage

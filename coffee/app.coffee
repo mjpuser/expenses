@@ -15,12 +15,13 @@ define [
 			path = 'page/' + path
 
 			load =
-				success: (page) ->
-					app.currentPage = page
-					page.render()
+				success: (Page) ->
+					app.currentPage = new Page
+					app.currentPage.render()
 
 				error: (err) ->
-					console.error(err)
+					console.log(err.message)
+					console.log(err.stack)
 					if path in err.requireModules
 						app.loadPage(404)
 

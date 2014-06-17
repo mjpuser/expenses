@@ -49,6 +49,13 @@ module.exports = function(grunt) {
 			var js = haml.optimize(haml.compile(lines));
 			var amdjs = '\
 				define(function(locals) {\
+					function html_escape(text) {\
+						return (text + "").\
+							replace(/&/g, "&amp;").\
+							replace(/</g, "&lt;").\
+							replace(/>/g, "&gt;").\
+							replace(/\"/g, "&quot;");\
+					}\
 					return function(locals) {\
 						with(locals || {}) {\
 							try {\
