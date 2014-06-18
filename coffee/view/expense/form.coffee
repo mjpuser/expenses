@@ -1,6 +1,6 @@
 define [
 	'backbone',
-	'model/form/base',
+	'model/form/expense',
 	'template/expense/form'
 ], (
 	Backbone,
@@ -14,6 +14,13 @@ define [
 		initialize: (options) ->
 			@template = template
 			@model ?= new FormModel
+
+		events:
+			'submit': 'submit'
+
+		submit: (e) ->
+			e.preventDefault()
+			@model.save()
 
 		render: ->
 			@$el.html @template()

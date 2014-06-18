@@ -1,3 +1,5 @@
 %form.expense
 	:each field in ['Category', 'Date', 'Amount']
 		%input{ name: field.toLowerCase(), placeholder: field }
+
+	%button.primary{ type: 'submit' } Add

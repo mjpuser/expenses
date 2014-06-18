@@ -1,14 +1,21 @@
 define [
+	'model/form/validation',
 	'backbone',
 	'underscore'
 ], (
+	Validation,
 	Backbone,
 	_
 ) ->
 	BaseFormModel = Backbone.Model.extend
 		initialize: ->
-			@on 'change', ->
-				@log @changed
+			@on 'error', (m, r, q) ->
+				location = r.getResponseHeader 'Location'
+				@set 'id', /keys.(\w+$)/.exec(location)[1]
+
+			@on 'invalid', (m, messages) ->
+				for message in messages
+					@log message.field, message.messages
 
 		log: console.log.bind console, '[FormModel]'
 		bindForm: (form) ->
@@ -58,5 +65,7 @@ define [
 			form.delegate 'input:not(input[type="radio"], input[type="checkbox"])', 'change keyup', ->
 				input = $(this)
 				self.set(input.attr('name'), input.val())
+
+	_.extend BaseFormModel.prototype, Validation.mixin
 
 	BaseFormModel

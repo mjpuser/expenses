@@ -10,12 +10,9 @@ define [
 			options ?= {}
 			@template = options.template
 			@on 'render:after', ->
-				console.log('views', @views)
-				views = for name, View of @views
-					console.log name, View
-					new View
-				console.log views
-				view.render() for view in views
+				for name, View of @views
+					view = new View
+					view.render()
 
 		render: ->
 			@trigger 'render:before'
