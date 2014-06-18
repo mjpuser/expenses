@@ -8,20 +8,25 @@ define [
 	Validation =
 		methods:
 			number: (val, arg) ->
-				if !/^\d+$/.test(val || '')
-					'is not a valid number'
+				@pattern val, /^\d+$/
 			pattern: (val, arg) ->
-				if !arg.test((val || '').toString())
-					'is not a valid string'
+				arg.test (val || '').toString()
 			required: (val, arg) ->
-				if /^\s*$/.test(val || '')
-					'is required'
+				@pattern val, /^\s*[^\s]+\s*$/
+
+		messages:
+			required: (field) -> "#{field} is required"
+			number: (field) -> "#{field} must be a number"
+			pattern: (field) -> "#{field} must be a valid format"
+			date: (field) -> "#{field} must be a date YYYY-MM-DD"
+			
 		mixin:
 			validate: (attrs) ->
 				messages = for field, methods of @validation
 					fieldMessages = for method, arg of methods
-						Validation.methods[method] attrs[field], arg
-					fieldMessages = (message for message in fieldMessages when message?)
+						if !Validation.methods[method] attrs[field], arg
+							Validation.messages[method] field.capitalize()
+					fieldMessages = (message for message in fieldMessages when message)
 
 					if fieldMessages.length > 0
 						fieldMessage = {}
