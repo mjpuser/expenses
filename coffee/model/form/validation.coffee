@@ -21,7 +21,7 @@ define [
 			required: (field) -> "#{field} is required"
 			number: (field) -> "#{field} must be a number"
 			pattern: (field) -> "#{field} must be a valid format"
-			date: (field) -> "#{field} must be a date YYYY-MM-DD"
+			date: (field) -> "#{field} must be YYYY-MM-DD"
 
 		mixin:
 			validate: (attrs) ->
