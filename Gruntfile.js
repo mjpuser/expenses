@@ -86,5 +86,5 @@ module.exports = function(grunt) {
 	});
 
 
-	grunt.registerTask('default', ['clean', 'copy:html', 'compile:haml', 'compile:coffee', 'copy:dependencies']);
+	grunt.registerTask('default', ['clean', 'copy:html', 'compile:haml', 'compile:coffee', 'copy:dependencies', 'watch']);
 };

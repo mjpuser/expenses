@@ -1,18 +1,20 @@
 define [
-	'page/base',
+	'view/base',
 	'template/page/index',
-	'view/expense/form'
+	'view/expense/form',
+	'model/form/expense'
 ], (
-	Page,
+	BaseView,
 	template,
-	Form
+	FormView,
+	FormModel
 ) ->
-	IndexPage = Page.extend
-		initialize: (options) ->
-			Page::initialize.call this, options
-			@template ?= template
-			@views =
-				form: Form
+	IndexPage = BaseView.extend
+		options:
+			form:
+				view: FormView
+				model: FormModel
+			template: template
 
 
 	IndexPage

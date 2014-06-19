@@ -1,27 +1,15 @@
 define [
-	'backbone',
+	'view/form',
 	'model/form/expense',
 	'template/expense/form'
 ], (
-	Backbone,
+	FormView,
 	FormModel,
 	template
 ) ->
 
-	FormView = Backbone.View.extend
+	ExpenseFormView = FormView.extend
 		el: '.form'
-
-		initialize: (options) ->
-			@template = template
-			@model ?= new FormModel
-
-		events:
-			'submit': 'submit'
-
-		submit: (e) ->
-			e.preventDefault()
-			@model.save()
-
-		render: ->
-			@$el.html @template()
-			@model.bindForm @$el
+		log: console.log.bind console, '[ExpenseFormView]'
+		options:
+			template: template

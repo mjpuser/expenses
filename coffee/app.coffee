@@ -17,7 +17,7 @@ define [
 			load =
 				success: (Page) ->
 					app.currentPage = new Page
-					app.currentPage.render()
+					app.currentPage.trigger('render')
 
 				error: (err) ->
 					console.log(err.message)

@@ -3,11 +3,9 @@ define [
 ], (
 	FormModel
 ) ->
-	ExpenseFormModel = FormModel.extend
+	ExpenseModel = FormModel.extend
 		urlRoot: '/db/buckets/expense/keys'
-		validate: ->
-			v = FormModel::validate.apply(this, [].slice.call(arguments))
-
+			
 		validation:
 			amount:
 				number: true
@@ -17,3 +15,5 @@ define [
 
 			date:
 				pattern: /^\d{4}-\d{2}-\d{2}$/
+
+	ExpenseModel
