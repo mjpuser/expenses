@@ -37,4 +37,5 @@ define [
 						fieldMessage
 
 				messages = (message for message in messages when message)
-				_.flatten messages
+				if messages.length
+					_.flatten messages
