@@ -1,7 +1,6 @@
 %form.expense
 	:each field in ['Category', 'Date', 'Amount']
-		%label{ class: field.toLowerCase() }
-			%input{ name: field.toLowerCase(), placeholder: field }
-			%small.error
+		%label{ class: "#{field.toLowerCase()} row" }
+			%input{ name: field.toLowerCase(), placeholder: field, type: 'text' }
 
 	%button.primary{ type: 'submit' } Add

@@ -1,9 +1,11 @@
 define [
 	'model/form/base',
-	'view/base'
+	'view/base',
+	'jquery'
 ], (
 	FormModel
 	BaseView,
+	$
 ) ->
 	FormView = BaseView.extend
 		el: 'form'
@@ -15,19 +17,20 @@ define [
 
 				@listenTo @model, 'invalid', (model, messages) ->
 					for message in messages
-						@$el
-							.find "label.#{message.field}"
-							.addClass "error"
-							.find ".error-message"
-							.text message.messages
+						field = @$el.find "label.#{message.field}"
+						errors = field.addClass("error").find "small.error"
+						if !errors.length
+							errors = $('<small class="error"><small>')
+							field.append errors
+
+						errors.text message.messages
 
 				@listenTo @model, 'change', (model) ->
 					for field, _ of model.changed
 						@$el
-							.find ".field-label.#{field}"
+							.find "label.#{field}"
 							.removeClass "error"
-							.find ".error-message"
-							.text ""
+							.find("small.error").remove()
 
 
 		log: console.log.bind console, '[FormView]'
