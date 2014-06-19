@@ -15,7 +15,20 @@ define [
 
 				@listenTo @model, 'invalid', (model, messages) ->
 					for message in messages
-						@log message.field, message.messages
+						@$el
+							.find "label.#{message.field}"
+							.addClass "error"
+							.find ".error-message"
+							.text message.messages
+
+				@listenTo @model, 'change', (model) ->
+					for field, _ of model.changed
+						@$el
+							.find ".field-label.#{field}"
+							.removeClass "error"
+							.find ".error-message"
+							.text ""
+
 
 		log: console.log.bind console, '[FormView]'
 
@@ -36,11 +49,16 @@ define [
 			@listenTo @model, 'change', (model, options) ->
 				_.each _.keys(model.changed), (attr) ->
 					value = model.changed[attr]
-					inputs = form.find '[name="' + attr + '"]'
+					inputs = form.find "[name=\"#{attr}\"]"
 
-					inputs.filter('[type="radio"], [type="checkbox"]').filter('[value="' + value + '"]').prop('checked', true)
+					inputs
+						.filter '[type="radio"], [type="checkbox"]'
+						.filter "[value=\"#{value}\"]"
+						.prop 'checked', true
 
-					inputs.filter('input:not([type="radio"], [type="checkbox"]), select').val(value)
+					inputs
+						.filter 'input:not([type="radio"], [type="checkbox"]), select'
+						.val value
 
 		changeSelect: (e) ->
 			input = @$ e.target
