@@ -5,6 +5,6 @@ define [
 	Validation,
 	Backbone
 ) ->
-	FormModel = Backbone.Model.extend(Validation.mixin)
+	FormModel = Backbone.Model.extend Validation.mixin
 
 	FormModel
