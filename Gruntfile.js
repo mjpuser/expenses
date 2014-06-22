@@ -11,11 +11,11 @@ module.exports = function(grunt) {
 		pkg: grunt.file.readJSON('package.json'),
 		watch: {
 			haml: {
-				files: 'haml/**/*.haml',
+				files: 'app/haml/**/*.haml',
 				tasks: ['default']
 			},
 			coffee: {
-				files: 'coffee/**/*.coffee',
+				files: 'app/coffee/**/*.coffee',
 				tasks: ['default']
 			},
 			bower: {
@@ -32,8 +32,8 @@ module.exports = function(grunt) {
 	});
 
 	grunt.task.registerTask('copy:html', 'Copy html files', function() {
-		grunt.file.recurse('html', function(path) {
-			grunt.file.copy(path, path.replace(/^html/, grunt.config.get('buildDir')));
+		grunt.file.recurse('app/html', function(path) {
+			grunt.file.copy(path, path.replace(/^app\/html/, grunt.config.get('buildDir')));
 		});
 	});
 
@@ -46,7 +46,7 @@ module.exports = function(grunt) {
 	});
 
 	grunt.task.registerTask('compile:haml', 'Compile haml templates', function() {
-		grunt.file.recurse('haml', function(path) {
+		grunt.file.recurse('app/haml', function(path) {
 			if(!/\.haml$/.test(path)) {
 					return;
 			}
@@ -75,19 +75,19 @@ module.exports = function(grunt) {
 						}\
 					};\
 				});'
-			var targetPath = path.replace(/^haml|haml$/g, '');
+			var targetPath = path.replace(/^app\/haml|haml$/g, '');
 			grunt.file.write(grunt.config.get('buildDir') + '/js/template/' + targetPath + 'js', amdjs);
 		});
 	});
 
 	grunt.task.registerTask('compile:coffee', 'Compile coffee', function() {
-		grunt.file.recurse('coffee', function(path) {
+		grunt.file.recurse('app/coffee', function(path) {
 			if(!/\.coffee$/.test(path)) {
 				return;
 			}
 			var lines = '' + fs.readFileSync(path);
 			var js = coffee.compile(lines);
-			var targetPath = path.replace(/^coffee|coffee$/g, 'js');
+			var targetPath = path.replace(/^app\/coffee|coffee$/g, 'js');
 			grunt.file.write(grunt.config.get('buildDir') + '/' + targetPath, js);
 		});
 	});

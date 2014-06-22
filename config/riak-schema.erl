@@ -8,31 +8,29 @@
     ],
     [
 				%% category
-				{dynamic_field, [
+				{field, [
 						{name, "category"},
 						{type, string},
 						{analyzer_factory, {erlang, text_analyzers, whitespace_analyzer_factory}}
 				]},
 
 				%% name
-				{dynamic_field, [
+				{field, [
 						{name, "name"},
 						{type, string},
 						{analyzer_factory, {erlang, text_analyzers, whitespace_analyzer_factory}}
 				]},
 
         %% amount
-        {dynamic_field, [
+        {field, [
             {name, "amount"},
-            {type, integer},
-            {analyzer_factory, {erlang, text_analyzers, integer_analyzer_factory}}
-        ]},
+            {type, integer}
+	       ]},
 
         %% date
-        {dynamic_field, [
+        {field, [
             {name, "date"},
-            {type, date},
-            {analyzer_factory, {erlang, text_analyzers, noop_analyzer_factory}}
+            {type, date}
         ]},
 
         %% Everything else is a string
