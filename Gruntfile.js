@@ -1,5 +1,8 @@
 var haml = require('haml'),
 	coffee = require('coffee-script'),
+	cprocess = require('child_process'),
+	events = require('events'),
+	http = require('http'),
 	fs = require('fs');
 
 module.exports = function(grunt) {
@@ -13,6 +16,10 @@ module.exports = function(grunt) {
 			},
 			coffee: {
 				files: 'coffee/**/*.coffee',
+				tasks: ['default']
+			},
+			bower: {
+				files: 'bower_components/**/*',
 				tasks: ['default']
 			}
 		}
@@ -85,6 +92,63 @@ module.exports = function(grunt) {
 		});
 	});
 
+	grunt.task.registerTask('config:schema', 'Set schemas', function() {
+		var done = this.async();
+		cprocess.exec('search-cmd set-schema expense config/riak-schema.erl', function(err, stdout) {
+			if(err) {
+				console.error(err);
+			}
+			console.log(stdout);
+			done();
+		});
+	});
 
-	grunt.registerTask('default', ['clean', 'copy:html', 'compile:haml', 'compile:coffee', 'copy:dependencies', 'watch']);
+	grunt.task.registerTask('drop-bucket', 'Delete a bucket', function() {
+		var deleteObj = function(key) {
+			var emitter = new events.EventEmitter();
+			var options = {
+				hostname: 'expenses',
+				path: '/db/buckets/expense/keys/' + key,
+				method: 'DELETE'
+			};
+			http.request(options, function(res) {
+				emitter.emit('deleted', key);
+			}).end();
+			return emitter;
+		};
+		var getKeys = function() {
+			var emitter = new events.EventEmitter();
+			var options = {
+				hostname: 'expenses',
+				path: '/db/buckets/expense/keys?keys=true',
+				method: 'GET'
+			};
+			http.request(options, function(res) {
+				var body = '';
+				res.on('data', function(chunk) {
+					body += chunk;
+				});
+				res.on('end', function() {
+					var keys = JSON.parse(body)['keys'];
+					keys.forEach(function(key) {
+						emitter.emit('key', key);
+					});
+					emitter.emit('end');
+				});
+			}).end();
+			return emitter;
+		};
+
+		var e = getKeys();
+		var done = this.async();
+		e.on('key', function(key) {
+			var e = deleteObj(key);
+			e.on('deleted', function(key) {
+				console.log('deleted', key);
+			});
+		});
+	});
+
+
+	grunt.task.registerTask('default', ['clean', 'copy:html', 'compile:haml', 'compile:coffee', 'copy:dependencies', 'watch']);
 };
