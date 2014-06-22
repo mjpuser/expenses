@@ -6,7 +6,7 @@ define [
 	ExpenseModel = FormModel.extend
 		urlRoot: '/db/buckets/expense/keys'
 
-		validation:
+		fields:
 			amount:
 				number: true
 

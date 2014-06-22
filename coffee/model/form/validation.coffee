@@ -25,7 +25,7 @@ define [
 
 		mixin:
 			validate: (attrs) ->
-				messages = for field, methods of @validation
+				messages = for field, methods of @fields
 					fieldMessages = for method, arg of methods
 						if !Validation.methods[method] attrs[field], arg
 							Validation.messages[method] field.capitalize()
