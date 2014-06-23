@@ -41,13 +41,20 @@ pipeline.on('handle', function(promise) {
 				attr = attrs.name;
 			}
 		});
+
 		parser.on('endElement', function(name) {
 			if(name == 'result') {
 				promise.resolve();
 			}
 		});
 		res.on('data', function(chunk) {
-			parser.write(chunk);
+			try {
+				parser.write(chunk);
+			}
+			catch(e) {
+				this.obj = '' + chunk;
+				server.respond.bad(this);
+			}
 		}.bind(this));
 	}.bind(this)).end();
 });
