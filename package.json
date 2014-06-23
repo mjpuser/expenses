@@ -5,7 +5,8 @@
   "description": "Keep track of my expenses",
   "main": "./expenses.js",
   "dependencies": {
-    "apollo": "git://github.com/mjpuser/apollo.git#master"
+    "apollo": "git://github.com/mjpuser/apollo.git#master",
+    "node-expat": "^2.3.0"
   },
   "repository": {},
   "devDependencies": {
