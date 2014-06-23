@@ -141,11 +141,22 @@ module.exports = function(grunt) {
 
 		var e = getKeys();
 		var done = this.async();
+		var queue = [];
 		e.on('key', function(key) {
+			queue.push(key);
 			var e = deleteObj(key);
 			e.on('deleted', function(key) {
+				queue.splice(queue.indexOf(key), 1);
 				console.log('deleted', key);
+				if(queue.length == 0) {
+					done();
+				}
 			});
+		});
+		q.on('end', function() {
+			if(queue.length == 0) {
+				done();
+			}
 		});
 	});
 
