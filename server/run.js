@@ -12,17 +12,23 @@ pipeline.on('handle', function(promise) {
 		path: '/db/solr/' + entity + '/select' + this.url.search
 	}
 	http.request(options, function(res) {
-		var results = this.obj = [];
 		var result = null;
 		var attr = null;
 		var type = null;
 		var isInDoc = false, isInField = false;
 		var parser = new expat.Parser('UTF-8');
+		var response = this.obj = {
+			meta: {},
+			results: []
+		}
 		parser.on('startElement', function(name, attrs) {
+			if(name == 'result') {
+				response.meta.total = parseInt(attrs.numFound);
+			}
 			if(name == 'doc') {
 				isInDoc = true;
 				result = {};
-				results.push(result);
+				response.results.push(result);
 			}
 			else if(isInDoc) {
 				parser.on('text', function(text) {
