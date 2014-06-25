@@ -43,6 +43,9 @@ module.exports = function(grunt) {
 		grunt.file.copy('bower_components/backbone/backbone.js', buildDir + '/js/lib/backbone.js');
 		grunt.file.copy('bower_components/underscore/underscore.js', buildDir + '/js/lib/underscore.js');
 		grunt.file.copy('bower_components/jquery/dist/jquery.js', buildDir + '/js/lib/jquery.js');
+		grunt.file.copy('bower_components/d3/d3.js', buildDir + '/js/lib/d3.js');
+		grunt.file.copy('bower_components/nvd3/nv.d3.js', buildDir + '/js/lib/nv.d3.js');
+		grunt.file.copy('bower_components/nvd3/nv.d3.css', buildDir + '/css/lib/nv.d3.css');
 	});
 
 	grunt.task.registerTask('compile:haml', 'Compile haml templates', function() {
@@ -153,7 +156,7 @@ module.exports = function(grunt) {
 				}
 			});
 		});
-		q.on('end', function() {
+		e.on('end', function() {
 			if(queue.length == 0) {
 				done();
 			}
