@@ -19,6 +19,14 @@ define [
 			)
 
 		parse: (data) ->
+			data.results.sort (a, b) ->
+				comare = 0
+				if a.date < b.date
+					compare = 1
+				else if a.date > b.date
+					compare = -1
+				compare
+
 			return data.results
 
 	ExpenseCollection

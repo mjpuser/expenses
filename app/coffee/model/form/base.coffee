@@ -1,10 +1,11 @@
 define [
-	'model/form/validation',
-	'backbone'
+	'model/base',
+	'model/form/validation'
 ], (
-	Validation,
-	Backbone
+	BaseModel,
+	Validation
 ) ->
-	FormModel = Backbone.Model.extend Validation.mixin
+
+	FormModel = BaseModel.extend Validation.mixin
 
 	FormModel
