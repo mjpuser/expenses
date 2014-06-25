@@ -33,7 +33,9 @@ define [
 						values: {}
 					data.push datum
 
-				date = new Date(model.get 'date').getTime()
+				date = new Date(model.get 'date')
+				date.setMinutes(date.getUTCMinutes() + date.getTimezoneOffset())
+				date = date.getTime()
 				if date not in xCoords
 					xCoords.push date
 
