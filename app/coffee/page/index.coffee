@@ -23,7 +23,7 @@ define [
 				@stopListening @views.list.collection
 				@listenTo @views.form.model, 'sync', ->
 					@views.list.collection.fetchMonth 2014, '06'
-				@listenTo @views.list.collection, 'sync', ->
+				@listenTo @views.list.collection, 'sync remove', ->
 					@views.graph.graph @views.list.collection.data()
 
 		options:

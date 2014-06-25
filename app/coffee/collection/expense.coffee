@@ -22,6 +22,7 @@ define [
 
 		data: ->
 			data = []
+			xCoords = []
 			for model in @models
 				datum = _.find data, (d) ->
 					d.key == model.get('category')
@@ -29,11 +30,22 @@ define [
 				if not datum
 					datum =
 						key: model.get('category')
-						values: []
+						values: {}
 					data.push datum
 
-				datum.values.push [ new Date(model.get('date')).getTime(), model.get('amount') ]
-			data
+				date = new Date(model.get 'date').getTime()
+				if date not in xCoords
+					xCoords.push date
+
+				date = '' + date
+				value = datum.values[date] || 0
+				datum.values[date] = value + model.get('amount')
+
+			for datum in data
+				datum.values = xCoords.map (x) ->
+					[ x, datum.values['' + x] || 0 ]
+
+			return data
 
 		parse: (data) ->
 			data.results.sort (a, b) ->

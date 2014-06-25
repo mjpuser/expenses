@@ -3,10 +3,13 @@
 	%thead
 		%tr
 			:for attr, value in collection.models[0].attributes
-				%th= attr
+				%th= attr.capitalize()
+			%th Delete
 	%tbody
 	:for model in collection.models
 		%tr.expense
 			:for attr, value in model.attributes
 				%td= value
+			%td.controls
+				%button.delete.tiny.alert{ data-id: "#{model.get('id')}" } X
 	- }
