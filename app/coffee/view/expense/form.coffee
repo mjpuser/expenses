@@ -1,10 +1,8 @@
 define [
 	'view/form',
-	'model/form/expense',
 	'template/expense/form'
 ], (
 	FormView,
-	FormModel,
 	template
 ) ->
 

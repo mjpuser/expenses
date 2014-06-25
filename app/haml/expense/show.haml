@@ -1,0 +1,10 @@
+%table.expenses.row
+	%thead
+		%tr
+			:for attr, value in collection.models[0].attributes
+				%th= attr
+	%tbody
+	:for model in collection.models
+		%tr.expense
+			:for attr, value in model.attributes
+				%td= value
