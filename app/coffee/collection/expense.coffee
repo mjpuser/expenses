@@ -1,9 +1,11 @@
 define [
 	'backbone',
-	'model/form/expense'
+	'model/form/expense',
+	'underscore'
 ], (
 	Backbone,
-	ExpenseModel
+	ExpenseModel,
+	_
 ) ->
 	ExpenseCollection = Backbone.Collection.extend
 		model: ExpenseModel
@@ -18,6 +20,21 @@ define [
 					rows: 10000
 			)
 
+		data: ->
+			data = []
+			for model in @models
+				datum = _.find data, (d) ->
+					d.key == model.get('category')
+
+				if not datum
+					datum =
+						key: model.get('category')
+						values: []
+					data.push datum
+
+				datum.values.push [ new Date(model.get('date')).getTime(), model.get('amount') ]
+			data
+
 		parse: (data) ->
 			data.results.sort (a, b) ->
 				comare = 0
@@ -27,6 +44,6 @@ define [
 					compare = -1
 				compare
 
-			return data.results
+			data.results
 
 	ExpenseCollection

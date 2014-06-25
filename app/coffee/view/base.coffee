@@ -12,10 +12,8 @@ define [
 			@options = _.extend {}, @options, options
 			@model ?= @options.model
 			@collection ?= @options.collection
-			@template = @options.template
+			@template = @options.template || -> ''
 			@views = {}
-
-
 
 			@on 'render', ->
 				@trigger 'render:before'

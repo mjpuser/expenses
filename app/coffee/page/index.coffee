@@ -2,6 +2,7 @@ define [
 	'view/base',
 	'view/expense/form',
 	'view/expense/list',
+	'view/expense/graph',
 	'model/form/expense',
 	'collection/expense',
 	'template/page/index'
@@ -9,6 +10,7 @@ define [
 	BaseView,
 	FormView,
 	ExpenseListView,
+	GraphView,
 	FormModel,
 	ExpenseCollection,
 	template
@@ -18,8 +20,11 @@ define [
 			BaseView::initialize.call this, options
 			@on 'render:after', ->
 				@stopListening @views.form.model
+				@stopListening @views.list.collection
 				@listenTo @views.form.model, 'sync', ->
 					@views.list.collection.fetchMonth 2014, '06'
+				@listenTo @views.list.collection, 'sync', ->
+					@views.graph.graph @views.list.collection.data()
 
 		options:
 			form:
@@ -28,7 +33,8 @@ define [
 			list:
 				view: ExpenseListView
 				collection: ExpenseCollection
+			graph:
+				view: GraphView
 			template: template
-
 
 	IndexPage
