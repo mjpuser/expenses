@@ -1,4 +1,5 @@
 %table.expenses.row
+	- if(collection.models.length) {
 	%thead
 		%tr
 			:for attr, value in collection.models[0].attributes
@@ -8,3 +9,4 @@
 		%tr.expense
 			:for attr, value in model.attributes
 				%td= value
+	- }

@@ -7,12 +7,15 @@ define [
 ) ->
 	Backbone.View.extend
 		el: 'body'
-
+		log: console.log.bind console, '[BaseView]'
 		initialize: (options) ->
 			@options = _.extend {}, @options, options
 			@model ?= @options.model
 			@collection ?= @options.collection
 			@template = @options.template
+			@views = {}
+
+
 
 			@on 'render', ->
 				@trigger 'render:before'
@@ -26,11 +29,12 @@ define [
 							model: new option.model if option.model?
 							collection: new option.collection if option.collection?
 						})
+						@views[name] = view
 
-						view.trigger 'render'
+				for name, view of @views
+					view.trigger 'render'
 
 		render: ->
-			console.log @collection, @model
 			@$el.html @template(
 				model: @model
 				collection: @collection
