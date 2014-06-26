@@ -16,4 +16,7 @@ define [
 			date:
 				date: true
 
+			name:
+				required: true
+
 	ExpenseModel
