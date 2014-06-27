@@ -22,9 +22,6 @@ pipeline.on('handle', function(promise) {
 			results: []
 		}
 		parser.on('startElement', function(name, attrs) {
-			if(name == 'result') {
-				response.meta.total = parseInt(attrs.numFound);
-			}
 			if(name == 'doc') {
 				isInDoc = true;
 				result = {};
@@ -45,6 +42,9 @@ pipeline.on('handle', function(promise) {
 				});
 				type = name;
 				attr = attrs.name;
+			}
+			else if(name == 'result') {
+				response.meta.total = parseInt(attrs.numFound);
 			}
 		});
 
