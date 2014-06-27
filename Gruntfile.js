@@ -56,28 +56,7 @@ module.exports = function(grunt) {
 			var lines = ('' + fs.readFileSync(path)).replace(/\t/g, function(tab) {
 				return '  ';
 			});
-			var js = haml.optimize(haml.compile(lines));
-			var amdjs = '\
-				define(function(locals) {\
-					function html_escape(text) {\
-						return (text + "").\
-							replace(/&/g, "&amp;").\
-							replace(/</g, "&lt;").\
-							replace(/>/g, "&gt;").\
-							replace(/\"/g, "&quot;");\
-					}\
-					return function(locals) {\
-						with(locals || {}) {\
-							try {\
-								var _$output;\
-								_$output = ' + js + ';\
-								return _$output;\
-							} catch (e) {\
-								return "<pre class=\\"error\\">" + e.stack + "</pre>";\
-							}\
-						}\
-					};\
-				});'
+			var amdjs = haml.amd(lines);
 			var targetPath = path.replace(/^app\/haml|haml$/g, '');
 			grunt.file.write(grunt.config.get('buildDir') + '/js/template/' + targetPath + 'js', amdjs);
 		});
