@@ -3,13 +3,16 @@
 	%thead
 		%tr
 			:for attr, value in collection.models[0].attributes
-				%th= attr.capitalize()
-			%th Delete
+				:if attr != 'id'
+					%th= attr.capitalize()
+			%th.controls
 	%tbody
 	:for model in collection.models
-		%tr.expense
+		%tr.expense{ contenteditable: '' }
 			:for attr, value in model.attributes
-				%td= value
+				:if attr != 'id'
+					%td{ class: "attr #{attr}", data-name: "#{attr}" }= value
 			%td.controls
+				%button.save.tiny{ data-id: "#{model.get('id')}" } Save
 				%button.delete.tiny.alert{ data-id: "#{model.get('id')}" } X
 	- }

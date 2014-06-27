@@ -5,6 +5,9 @@ define [
 ) ->
 	ExpenseModel = FormModel.extend
 		urlRoot: '/db/buckets/expense/keys'
+		initialize: (attrs, options) ->
+			FormModel::initialize.call(this, attrs, options)
+			console.log('initializing expense model')
 
 		fields:
 			amount:
