@@ -45,6 +45,9 @@ define [
 			for el in attrs.toArray()
 				attr = $(el).data('name')
 				val = $(el).text()
+				if $.isNumeric val
+					val = parseInt val
+				
 				model.set(attr, val)
 
 			model.save()
