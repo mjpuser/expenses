@@ -48,7 +48,7 @@ module.exports = function(grunt) {
 		grunt.file.copy('bower_components/nvd3/nv.d3.css', buildDir + '/css/lib/nv.d3.css');
 	});
 
-	grunt.task.registerTask('compile:haml', 'Compile haml templates', function() {
+	grunt.task.registerTask('haml:compile', 'Compile haml templates', function() {
 		grunt.file.recurse('app/haml', function(path) {
 			if(!/\.haml$/.test(path)) {
 					return;
@@ -62,13 +62,21 @@ module.exports = function(grunt) {
 		});
 	});
 
-	grunt.task.registerTask('compile:coffee', 'Compile coffee', function() {
+	grunt.task.registerTask('coffee:compile', 'Compile coffee', function() {
 		grunt.file.recurse('app/coffee', function(path) {
 			if(!/\.coffee$/.test(path)) {
 				return;
 			}
 			var lines = '' + fs.readFileSync(path);
-			var js = coffee.compile(lines);
+			try {
+				var js = coffee.compile(lines);
+			}
+			catch(e) {
+				console.error(e.message);
+				console.error(path, e.location.first_line + ':' + e.location.first_column);
+				console.error(lines.split('\n').slice(e.location.first_line-3, e.location.last_line+2).join('\n'));
+				throw Error('Could not compile coffee compile');
+			}
 			var targetPath = path.replace(/^app\/coffee|coffee$/g, 'js');
 			grunt.file.write(grunt.config.get('buildDir') + '/' + targetPath, js);
 		});
@@ -143,5 +151,5 @@ module.exports = function(grunt) {
 	});
 
 
-	grunt.task.registerTask('default', ['clean', 'copy:html', 'compile:haml', 'compile:coffee', 'copy:dependencies', 'watch']);
+	grunt.task.registerTask('default', ['clean', 'copy:html', 'haml:compile', 'coffee:compile', 'copy:dependencies', 'watch']);
 };
