@@ -3,7 +3,7 @@ define [
 	'view/expense/form',
 	'view/expense/list',
 	'view/expense/graph',
-	'model/form/expense',
+	'model/expense',
 	'collection/expense',
 	'template/page/index'
 ], (

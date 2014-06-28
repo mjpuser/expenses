@@ -1,6 +1,6 @@
 define [
 	'view/base',
-	'model/form/expense',
+	'model/expense',
 	'template/expense/show',
 	'jquery'
 ], (
