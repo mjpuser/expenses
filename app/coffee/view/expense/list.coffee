@@ -28,6 +28,11 @@ define [
 		events:
 			'click .delete': 'clickDelete'
 			'click .save': 'clickSave'
+			'click .attr': 'clickAttr'
+
+		clickAttr: (e) ->
+			@$el.find('.attr[contenteditable]').removeAttr('contenteditable')
+			$(e.target).attr('contenteditable', '')
 
 		clickDelete: (e) ->
 			id = $(e.target).data('id')
@@ -38,7 +43,8 @@ define [
 		clickSave: (e) ->
 			id = $(e.target).data('id')
 			model = @collection.where(id: id)[0]
-			for el in $(e.target).parents('tr').first().find('td.attr').toArray()
+			attrs = $(e.target).parents('tr').first().find('td.attr')
+			for el in attrs.toArray()
 				attr = $(el).data('name')
 				val = $(el).text()
 				model.set(attr, val)

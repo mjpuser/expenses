@@ -8,7 +8,7 @@
 			%th.controls
 	%tbody
 	:for model in collection.models
-		%tr.expense{ contenteditable: '' }
+		%tr.expense
 			:for attr, value in model.attributes
 				:if attr != 'id'
 					%td{ class: "attr #{attr}", data-name: "#{attr}" }= value
