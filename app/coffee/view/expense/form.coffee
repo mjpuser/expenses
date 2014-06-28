@@ -14,7 +14,7 @@ define [
 			FormView::initialize.call this, options
 			@on 'render:after', ->
 				# autofill date
-				@$el.find('.date input').val(format.date('YYYY-MM-DD', new Date()))
+				@$el.find('.date input').val(format.date('YYYY-MM-DD', new Date())).change()
 				
 		log: console.log.bind console, '[ExpenseFormView]'
 		options:

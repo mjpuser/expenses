@@ -11,14 +11,22 @@ define [
 ) ->
 	ExpenseCollection = Backbone.Collection.extend
 		model: ExpenseModel
+		initialize: (options) ->
+			date = new Date()
+			@start = new Date(date.getFullYear(), date.getMonth())
+			@end = new Date(@start.getTime())
+			@end.setMonth(@end.getMonth() + 1)
 
 		fetchRange: (start, end) ->
+			start ?= @start
+			end ?= @end
+
 			from = format.date('YYYY-MM-DD', start)
 			to = format.date('YYYY-MM-DD', end)
 
 			@start = start
 			@end = end
-			
+
 			this.fetch
 				url: '/api/expense/search?'
 				data:

@@ -12,7 +12,7 @@ define [
 		initialize: (options) ->
 			BaseView::initialize.call this, options
 			@expenses = @collection
-			@listenTo @expenses, 'sync remove', @graph
+			@listenTo @expenses, 'sync', @graph
 
 		daysBetween: (start, end) ->
 			a = start.getTime()
@@ -48,6 +48,8 @@ define [
 				value = datum.values[date] || 0
 				datum.values[date] = value + model.get('amount')
 
+			data = [{ key: '', values: {} }] if data.length == 0
+
 			for datum in data
 				datum.values = xCoords.map (x) ->
 					[ x, datum.values['' + x] || 0 ]
@@ -56,27 +58,28 @@ define [
 
 		graph: ->
 			self = this
-			if @expenses.models.length
-				nv.addGraph ->
-					chart = nv.models.multiBarChart()
-						.transitionDuration(350)
-						.x((d) -> d[0])   		# We can modify the data accessor functions...
-						.y((d) -> d[1])
-						.reduceXTicks(true)   #If 'false', every single x-axis tick label will be rendered.
-						.rotateLabels(0)      #Angle to rotate x-axis labels.
-						.showControls(true)   #Allow user to switch between 'Grouped' and 'Stacked' mode.
-						.groupSpacing(0.1)    #Distance between each group of bars.
+			nv.addGraph ->
+				chart = nv.models.multiBarChart()
+					.x((d) -> d[0])   		# We can modify the data accessor functions...
+					.y((d) -> d[1])
+					.reduceXTicks(true)   #If 'false', every single x-axis tick label will be rendered.
+					.rotateLabels(0)      #Angle to rotate x-axis labels.
+					.showControls(true)   #Allow user to switch between 'Grouped' and 'Stacked' mode.
+					.groupSpacing(0.1)    #Distance between each group of bars.
 
-					chart.xAxis
-						.tickFormat((d) -> d3.time.format('%x')(new Date(d)))
+				if self.expenses.models.length == 0
+					chart.forceY([0,50])
 
-					chart.yAxis
-						.tickFormat(d3.format(',.2f'))
+				chart.xAxis
+					.tickFormat((d) -> d3.time.format('%x')(new Date(d)))
 
-					d3.select('.graph svg')
-						.datum(self.normalize())
-						.call(chart)
+				chart.yAxis
+					.tickFormat(d3.format(',.2f'))
 
-					nv.utils.windowResize(chart.update)
+				d3.select('.graph svg')
+					.datum(self.normalize())
+					.call(chart)
 
-					chart
+				nv.utils.windowResize(chart.update)
+
+				chart

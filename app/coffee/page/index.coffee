@@ -29,17 +29,13 @@ define [
 			@options.navigation.collection = @expenses
 
 			fetch = ->
-				date = new Date()
-				console.log('date', date)
-				start = new Date(date.getFullYear(), date.getMonth())
-				console.log('start', start)
-				end = new Date(start.getTime())
-				end.setMonth(end.getMonth() + 1)
-				console.log('start', start, 'end', end)
-				@expenses.fetchRange(start, end)
+				@expenses.fetchRange()
 
 			@listenTo @expense, 'sync', fetch
-			@on 'render:after', fetch
+			@on 'render:after', ->
+				fetch.call(this)
+				@stopListening @views.list
+				@listenTo @views.list, 'delete', fetch
 
 		options:
 			form:

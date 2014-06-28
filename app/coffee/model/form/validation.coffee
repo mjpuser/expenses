@@ -13,7 +13,7 @@ define [
 			pattern: (val, arg) ->
 				arg.test (val || '').toString()
 			required: (val, arg) ->
-				@pattern val, /^\s*[^\s]+\s*$/
+				@pattern val, /[^\s]/
 			date: (val, arg) ->
 				@pattern val, /^\d+-\d{2}-\d{2}$/
 

@@ -30,10 +30,13 @@ define [
 			$(e.target).attr('contenteditable', '')
 
 		clickDelete: (e) ->
+			self = this
 			id = $(e.target).data('id')
 			model = @collection.where(id: id)[0]
-			model.destroy()
+			model.destroy complete: ->
+				self.trigger 'delete'
 			@collection.remove model
+
 
 		clickSave: (e) ->
 			id = $(e.target).data('id')

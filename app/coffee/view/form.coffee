@@ -32,7 +32,6 @@ define [
 							.removeClass "error"
 							.find("small.error").remove()
 
-
 		log: console.log.bind console, '[FormView]'
 
 		events:
