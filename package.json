@@ -12,7 +12,7 @@
   "devDependencies": {
     "coffee-script": "^1.7.1",
     "grunt": "^0.4.5",
-    "grunt-contrib-scss": "^0.1.2",
+    "grunt-contrib-sass": "^0.7.3",
     "grunt-contrib-watch": "^0.6.1",
     "haml": "git://github.com/mjpuser/haml-js.git#master"
   }

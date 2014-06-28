@@ -6,8 +6,9 @@ var haml = require('haml'),
 	fs = require('fs');
 
 module.exports = function(grunt) {
+	var buildDir = 'build';
 	grunt.initConfig({
-		buildDir: 'build',
+		buildDir: buildDir,
 		pkg: grunt.file.readJSON('package.json'),
 		watch: {
 			haml: {
@@ -21,11 +22,25 @@ module.exports = function(grunt) {
 			bower: {
 				files: 'bower_components/**/*',
 				tasks: ['default']
+			},
+			sass: {
+				files: 'app/sass/**/*.scss',
+				tasks: ['default']
+			}
+		},
+		sass: {
+			dist: {
+				files: function() {
+					var files = {};
+					files[buildDir + '/css/main.css'] = 'app/sass/main.scss';
+					return files;
+				}.call()
 			}
 		}
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-contrib-sass');
 
 	grunt.task.registerTask('clean', 'Delete build director', function() {
 		grunt.file.delete(grunt.config.get('buildDir'));
@@ -151,5 +166,5 @@ module.exports = function(grunt) {
 	});
 
 
-	grunt.task.registerTask('default', ['clean', 'copy:html', 'haml:compile', 'coffee:compile', 'copy:dependencies', 'watch']);
+	grunt.task.registerTask('default', ['clean', 'copy:html', 'haml:compile', 'coffee:compile', 'copy:dependencies', 'sass', 'watch']);
 };

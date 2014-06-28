@@ -1,4 +1,4 @@
-%form.expense.row{ style: 'margin-top: 40px'}
+%form.expense{ style: 'margin-top: 40px'}
 	:each field in ['Date', 'Category', 'Name', 'Amount']
 		%label{ class: "#{field.toLowerCase()} column large-3" }
 			%input{ name: field.toLowerCase(), placeholder: field, type: 'text' }
