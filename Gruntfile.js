@@ -13,19 +13,19 @@ module.exports = function(grunt) {
 		watch: {
 			haml: {
 				files: 'app/haml/**/*.haml',
-				tasks: ['default']
+				tasks: ['haml:compile']
 			},
 			coffee: {
 				files: 'app/coffee/**/*.coffee',
-				tasks: ['default']
+				tasks: ['coffee:compile']
 			},
 			bower: {
 				files: 'bower_components/**/*',
-				tasks: ['default']
+				tasks: ['copy:dependencies']
 			},
 			sass: {
 				files: 'app/sass/**/*.scss',
-				tasks: ['default']
+				tasks: ['sass']
 			}
 		},
 		sass: {
