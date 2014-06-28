@@ -14,10 +14,26 @@ define [
 			@expenses = @collection
 			@listenTo @expenses, 'sync remove', @graph
 
+		daysInMonth: (year, month) ->
+			d = new Date(year, month)
+			d.setDate(1)
+			a = d.getTime()
+			d.setMonth(d.getMonth() + 1)
+			b = d.getTime()
+			return (b - a)/(1000*60*60*24)
+
+		leadZero: (x) ->
+			'0' + x if x < 10
+			x
+
 		normalize: ->
 			data = []
-			xCoords = []
-			month = new Date(@expenses.year, @expenses.month)
+			month = new Date(@expenses.year, @expenses.month-1)
+			days = @daysInMonth(month.getFullYear(), month.getMonth())
+
+			xCoords = for day in [1..days]
+				dateStr = "#{month.getFullYear()}-#{@leadZero(month.getMonth()+1)}-#{@leadZero(day)}"
+				(new Date(dateStr)).getTime()
 
 			for model in @expenses.models
 				datum = _.find data, (d) ->
@@ -51,7 +67,7 @@ define [
 				nv.addGraph ->
 					chart = nv.models.multiBarChart()
 						.transitionDuration(350)
-						.x((d) -> d[0])   # We can modify the data accessor functions...
+						.x((d) -> d[0])   		# We can modify the data accessor functions...
 						.y((d) -> d[1])
 						.reduceXTicks(true)   #If 'false', every single x-axis tick label will be rendered.
 						.rotateLabels(0)      #Angle to rotate x-axis labels.
