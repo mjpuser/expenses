@@ -7,12 +7,12 @@
 					%th= attr.capitalize()
 			%th.controls
 	%tbody
-	:for model in collection.models
-		%tr.expense
-			:for attr, value in model.attributes
-				:if attr != 'id'
-					%td{ class: "attr #{attr}", data-name: "#{attr}" }= value
-			%td.controls
-				%button.save.tiny{ data-id: "#{model.get('id')}" } Save
-				%button.delete.tiny.alert{ data-id: "#{model.get('id')}" } X
-	- }
+		:for model in collection.models
+			%tr.expense
+				:for attr, value in model.attributes
+					:if attr != 'id'
+						%td{ class: "attr #{attr}", data-name: "#{attr}" }= value
+				%td.controls
+					%button.save.tiny{ data-id: "#{model.get('id')}" } Save
+					%button.delete.tiny.alert{ data-id: "#{model.get('id')}" } X
+		- }
