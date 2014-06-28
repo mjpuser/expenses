@@ -1,6 +1,6 @@
 define [
 	'backbone',
-	'model/form/expense',
+	'model/expense',
 	'underscore'
 ], (
 	Backbone,
@@ -9,10 +9,16 @@ define [
 ) ->
 	ExpenseCollection = Backbone.Collection.extend
 		model: ExpenseModel
+		month: (new Date()).getMonth() + 1
+		year: (new Date()).getFullYear()
 
 		# year: 4 digit year
 		# month: integer; 1 <= month <= 12
 		fetchMonth: (year, month) ->
+			year = @year = year || @year
+			month = @month = month || @month
+			month = '0' + month if month < 10
+
 			this.fetch(
 				url: '/api/expense/search?'
 				data:
@@ -48,7 +54,7 @@ define [
 					[ x, datum.values['' + x] || 0 ]
 
 			return data
-
+			
 		parse: (data) ->
 			data.results.sort (a, b) ->
 				comare = 0

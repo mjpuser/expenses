@@ -9,8 +9,45 @@ define [
 ) ->
 	GraphViwe = BaseView.extend
 		el: '.graph svg'
-		graph: (data) ->
-			if data.length
+		initialize: (options) ->
+			BaseView::initialize.call this, options
+			@expenses = @collection
+			@listenTo @expenses, 'sync remove', @graph
+
+		normalize: ->
+			data = []
+			xCoords = []
+			month = new Date(@expenses.year, @expenses.month)
+
+			for model in @expenses.models
+				datum = _.find data, (d) ->
+					d.key == model.get('category')
+
+				if not datum
+					datum =
+						key: model.get('category')
+						values: {}
+					data.push datum
+
+				date = new Date(model.get 'date')
+				date.setMinutes(date.getUTCMinutes() + date.getTimezoneOffset())
+				date = date.getTime()
+				if date not in xCoords
+					xCoords.push date
+
+				date = '' + date
+				value = datum.values[date] || 0
+				datum.values[date] = value + model.get('amount')
+
+			for datum in data
+				datum.values = xCoords.map (x) ->
+					[ x, datum.values['' + x] || 0 ]
+
+			return data
+
+		graph: ->
+			self = this
+			if @expenses.models.length
 				nv.addGraph ->
 					chart = nv.models.multiBarChart()
 						.transitionDuration(350)
@@ -28,7 +65,7 @@ define [
 						.tickFormat(d3.format(',.2f'))
 
 					d3.select('.graph svg')
-						.datum(data)
+						.datum(self.normalize())
 						.call(chart)
 
 					nv.utils.windowResize(chart.update)

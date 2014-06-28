@@ -11,28 +11,30 @@ define [
 	FormView,
 	ExpenseListView,
 	GraphView,
-	FormModel,
+	ExpenseModel,
 	ExpenseCollection,
 	template
 ) ->
 	IndexPage = BaseView.extend
 		initialize: (options) ->
 			BaseView::initialize.call this, options
-			@on 'render:after', ->
-				@stopListening @views.form.model
-				@stopListening @views.list.collection
-				@listenTo @views.form.model, 'sync', ->
-					@views.list.collection.fetchMonth 2014, '06'
-				@listenTo @views.list.collection, 'sync remove', ->
-					@views.graph.graph @views.list.collection.data()
+			@expenses = new ExpenseCollection()
+			@expense = new ExpenseModel()
+
+			@options.form.model = @expense
+			@options.list.collection = @expenses
+			@options.graph.collection = @expenses
+
+			@listenTo @expense, 'sync', ->
+				date = new Date(@expense.get 'date')
+				@expenses.fetchMonth date.getFullYear(), date.getMonth() + 1
+
 
 		options:
 			form:
 				view: FormView
-				model: FormModel
 			list:
 				view: ExpenseListView
-				collection: ExpenseCollection
 			graph:
 				view: GraphView
 			template: template

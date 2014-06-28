@@ -21,7 +21,7 @@ define [
 				@render()
 
 			@on 'render:before', ->
-				@collection.fetchMonth 2014, '06'
+				@collection.fetchMonth()
 
 		log: console.log.bind console, '[ExpenseListView]'
 

@@ -24,8 +24,8 @@ define [
 				for name, option of @options
 					if option?.view?
 						view = new option.view({
-							model: new option.model if option.model?
-							collection: new option.collection if option.collection?
+							model: option.model
+							collection: option.collection
 						})
 						@views[name] = view
 
