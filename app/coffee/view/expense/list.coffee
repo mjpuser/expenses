@@ -18,9 +18,6 @@ define [
 			@listenTo @collection, 'sync remove', ->
 				@render()
 
-			@on 'render:before', ->
-				@collection.fetchMonth()
-
 		log: console.log.bind console, '[ExpenseListView]'
 
 		events:
@@ -47,7 +44,7 @@ define [
 				val = $(el).text()
 				if $.isNumeric val
 					val = parseInt val
-				
+
 				model.set(attr, val)
 
 			model.save()

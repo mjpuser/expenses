@@ -14,22 +14,18 @@ define [
 			@expenses = @collection
 			@listenTo @expenses, 'sync remove', @graph
 
-		daysInMonth: (year, month) ->
-			d = new Date(year, month)
-			d.setDate(1)
-			a = d.getTime()
-			d.setMonth(d.getMonth() + 1)
-			b = d.getTime()
+		daysBetween: (start, end) ->
+			a = start.getTime()
+			b = end.getTime()
 			return (b - a)/(1000*60*60*24)
 
 		normalize: ->
 			data = []
-			month = new Date(@expenses.year, @expenses.month-1)
-			days = @daysInMonth(month.getFullYear(), month.getMonth())
+			days = @daysBetween(@expenses.start, @expenses.end)
 
 			xCoords = for day in [1..days]
-				d = new Date(month.getTime())
-				d.setDate(day)
+				d = new Date(@expenses.start.getTime())
+				d.setDate(d.getDate() + day)
 				d.getTime()
 
 			for model in @expenses.models

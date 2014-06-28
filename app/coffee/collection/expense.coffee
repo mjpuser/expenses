@@ -1,30 +1,29 @@
 define [
 	'backbone',
 	'model/expense',
+	'utils/format',
 	'underscore'
 ], (
 	Backbone,
 	ExpenseModel,
+	format,
 	_
 ) ->
 	ExpenseCollection = Backbone.Collection.extend
 		model: ExpenseModel
-		month: (new Date()).getMonth() + 1
-		year: (new Date()).getFullYear()
 
-		# year: 4 digit year
-		# month: integer; 1 <= month <= 12
-		fetchMonth: (year, month) ->
-			year = @year = year || @year
-			month = @month = month || @month
-			month = '0' + month if month < 10
+		fetchRange: (start, end) ->
+			from = format.date('YYYY-MM-DD', start)
+			to = format.date('YYYY-MM-DD', end)
 
-			this.fetch(
+			@start = start
+			@end = end
+			
+			this.fetch
 				url: '/api/expense/search?'
 				data:
-					q: "date:#{year}-#{month}*"
+					q: "date:[#{from} TO #{to}]"
 					rows: 10000
-			)
 
 		data: ->
 			data = []
@@ -54,7 +53,7 @@ define [
 					[ x, datum.values['' + x] || 0 ]
 
 			return data
-			
+
 		parse: (data) ->
 			data.results.sort (a, b) ->
 				comare = 0
