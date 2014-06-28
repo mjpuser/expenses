@@ -22,18 +22,15 @@ define [
 			b = d.getTime()
 			return (b - a)/(1000*60*60*24)
 
-		leadZero: (x) ->
-			'0' + x if x < 10
-			x
-
 		normalize: ->
 			data = []
 			month = new Date(@expenses.year, @expenses.month-1)
 			days = @daysInMonth(month.getFullYear(), month.getMonth())
 
 			xCoords = for day in [1..days]
-				dateStr = "#{month.getFullYear()}-#{@leadZero(month.getMonth()+1)}-#{@leadZero(day)}"
-				(new Date(dateStr)).getTime()
+				d = new Date(month.getTime())
+				d.setDate(day)
+				d.getTime()
 
 			for model in @expenses.models
 				datum = _.find data, (d) ->

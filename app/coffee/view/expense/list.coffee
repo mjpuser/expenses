@@ -15,9 +15,7 @@ define [
 		log: console.log.bind console, '[ExpenseListView]'
 		initialize: (options) ->
 			BaseView::initialize.call this, options
-			@listenTo @collection, 'sync', ->
-				@render()
-			@listenTo @collection, 'remove', ->
+			@listenTo @collection, 'sync remove', ->
 				@render()
 
 			@on 'render:before', ->
