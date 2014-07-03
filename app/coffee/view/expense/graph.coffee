@@ -22,10 +22,12 @@ define [
 		normalize: ->
 			data = []
 			days = @daysBetween(@expenses.start, @expenses.end)
-
+			console.log 'days', days
+			console.log 'start', @expenses.start, 'end', @expenses.end
 			xCoords = for day in [1..days]
-				d = new Date(@expenses.start.getTime())
-				d.setDate(d.getDate() + day)
+				d = new Date(@expenses.start.toISOString())
+				d.setUTCDate(d.getUTCDate() + day - 1)
+				console.log d
 				d.getTime()
 
 			for model in @expenses.models
@@ -39,12 +41,7 @@ define [
 					data.push datum
 
 				date = new Date(model.get 'date')
-				date.setMinutes(date.getUTCMinutes() + date.getTimezoneOffset())
-				date = date.getTime()
-				if date not in xCoords
-					xCoords.push date
-
-				date = '' + date
+				date = '' + date.getTime()
 				value = datum.values[date] || 0
 				datum.values[date] = value + model.get('amount')
 
@@ -71,7 +68,7 @@ define [
 					chart.forceY([0,50])
 
 				chart.xAxis
-					.tickFormat((d) -> d3.time.format('%x')(new Date(d)))
+					.tickFormat((d) -> (new Date(d)).toUTCString().substr(0,12))
 
 				chart.yAxis
 					.tickFormat(d3.format(',.2f'))

@@ -13,9 +13,16 @@ define [
 		model: ExpenseModel
 		initialize: (options) ->
 			date = new Date()
-			@start = new Date(date.getFullYear(), date.getMonth())
+			@start = new Date()
+			@start.setUTCFullYear(date.getFullYear())
+			@start.setUTCMonth(date.getMonth())
+			@start.setUTCDate(1)
+			@start.setUTCHours(0)
+			@start.setUTCMinutes(0)
+			@start.setUTCSeconds(0)
+			@start.setUTCMilliseconds(0)
 			@end = new Date(@start.getTime())
-			@end.setMonth(@end.getMonth() + 1)
+			@end.setUTCMonth(date.getMonth() + 1)
 
 		fetchRange: (start, end) ->
 			start ?= @start

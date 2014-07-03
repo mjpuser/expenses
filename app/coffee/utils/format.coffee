@@ -1,14 +1,15 @@
 define(->
 	format =
 		date: (dformat, date) ->
-			formatted = date.toDateString()
+			formatted = date.toISOString()
 			if dformat == 'YYYY-MM-DD'
-				year = date.getFullYear()
-				month = format.number.lead(date.getMonth() + 1)
-				day = format.number.lead date.getDate()
+				year = date.getUTCFullYear()
+				month = format.number.lead(date.getUTCMonth() + 1)
+				day = format.number.lead date.getUTCDate()
 				formatted = "#{year}-#{month}-#{day}"
+			console.log 'date', date, 'format', formatted
 			formatted
-		
+
 		number:
 			lead: (x, length) ->
 				length ?= 2

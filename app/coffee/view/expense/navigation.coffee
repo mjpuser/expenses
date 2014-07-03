@@ -33,20 +33,20 @@ define [
 		clickNext: (e) ->
 			start = new Date(@expenses.start.getTime())
 			if @horizon == 'month'
-				start.setMonth(start.getMonth() + 1)
+				start.setUTCMonth(start.getUTCMonth() + 1)
 
 			if @horizon == 'week'
-				start.setDate(start.getDate() + 7)
+				start.setUTCDate(start.getUTCDate() + 7)
 
 			@computeRange(@horizon, start)
 
 		clickPrev: (e) ->
 			start = new Date(@expenses.start.getTime())
 			if @horizon == 'month'
-				start.setMonth(start.getMonth() - 1)
+				start.setUTCMonth(start.getUTCMonth() - 1)
 
 			if @horizon == 'week'
-				start.setDate(start.getDate() - 7)
+				start.setUTCDate(start.getUTCDate() - 7)
 
 			@computeRange(@horizon, start)
 
@@ -55,15 +55,15 @@ define [
 			horizon ?= @horizon
 			start = start || new Date(@expenses.start.getTime())
 			if horizon == 'week'
-				start.setDate(start.getDate() - start.getDay())
+				start.setUTCDate(start.getUTCDate() - start.getUTCDay())
 				end = new Date(start.getTime())
-				end.setDate(end.getDate() + 6)
+				end.setUTCDate(end.getUTCDate() + 7)
 
 			if horizon == 'month'
 				start.setDate(1)
 				end = new Date(start.getTime())
-				end.setMonth(end.getMonth() + 1)
-				end.setDate(end.getDate() - 1)
+				end.setUTCMonth(end.getUTCMonth() + 1)
+				end.setUTCDate(end.getUTCDate() - 1)
 
 			@trigger 'change:range', start, end
 
