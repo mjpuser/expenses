@@ -60,7 +60,7 @@ define [
 				end.setUTCDate(end.getUTCDate() + 7)
 
 			if horizon == 'month'
-				start.setDate(1)
+				start.setUTCDate(1)
 				end = new Date(start.getTime())
 				end.setUTCMonth(end.getUTCMonth() + 1)
 				end.setUTCDate(end.getUTCDate() - 1)

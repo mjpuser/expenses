@@ -7,7 +7,6 @@ define(->
 				month = format.number.lead(date.getUTCMonth() + 1)
 				day = format.number.lead date.getUTCDate()
 				formatted = "#{year}-#{month}-#{day}"
-			console.log 'date', date, 'format', formatted
 			formatted
 
 		number:

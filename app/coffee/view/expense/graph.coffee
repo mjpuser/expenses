@@ -22,12 +22,9 @@ define [
 		normalize: ->
 			data = []
 			days = @daysBetween(@expenses.start, @expenses.end)
-			console.log 'days', days
-			console.log 'start', @expenses.start, 'end', @expenses.end
 			xCoords = for day in [1..days]
 				d = new Date(@expenses.start.toISOString())
 				d.setUTCDate(d.getUTCDate() + day - 1)
-				console.log d
 				d.getTime()
 
 			for model in @expenses.models
