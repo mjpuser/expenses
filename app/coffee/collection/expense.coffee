@@ -1,12 +1,12 @@
 define [
 	'backbone',
 	'model/expense',
-	'utils/format',
+	'utils/date',
 	'underscore'
 ], (
 	Backbone,
 	ExpenseModel,
-	format,
+	dateUtil,
 	_
 ) ->
 	ExpenseCollection = Backbone.Collection.extend
@@ -28,8 +28,8 @@ define [
 			start ?= @start
 			end ?= @end
 
-			from = format.date('YYYY-MM-DD', start)
-			to = format.date('YYYY-MM-DD', end)
+			from = dateUtil.format('YYYY-MM-DD', start)
+			to = dateUtil.format('YYYY-MM-DD', end)
 
 			@start = start
 			@end = end
@@ -68,6 +68,27 @@ define [
 					[ x, datum.values['' + x] || 0 ]
 
 			return data
+
+		average: ->
+
+			max = null
+			min = null
+			@models.forEach (model) ->
+				date = new Date(model.get 'date')
+				if !max || max < date
+					max = date
+				if !min || min > date
+					min = date
+
+			days = dateUtil.daysBetween(min, max) + 1
+			Math.floor(@total() / days)
+
+		total: ->
+			total = @models.reduce((sum, model) ->
+				sum + parseInt(model.get('amount'))
+			, 0)
+
+			total
 
 		parse: (data) ->
 			data.results.sort (a, b) ->

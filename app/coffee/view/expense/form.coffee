@@ -1,11 +1,11 @@
 define [
 	'view/form',
 	'template/expense/form',
-	'utils/format'
+	'utils/date'
 ], (
 	FormView,
 	template,
-	format
+	dateUtil
 ) ->
 
 	ExpenseFormView = FormView.extend
@@ -14,8 +14,8 @@ define [
 			FormView::initialize.call this, options
 			@on 'render:after', ->
 				# autofill date
-				@$el.find('.date input').val(format.date('YYYY-MM-DD', new Date())).change()
-				
+				@$el.find('.date input').val(dateUtil.format('YYYY-MM-DD', new Date())).change()
+
 		log: console.log.bind console, '[ExpenseFormView]'
 		options:
 			template: template

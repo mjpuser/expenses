@@ -1,9 +1,11 @@
 define [
 	'view/base',
+	'utils/date',
 	'nvd3',
 	'd3'
 ], (
 	BaseView,
+	dateUtil,
 	nv,
 	d3
 ) ->
@@ -14,14 +16,9 @@ define [
 			@expenses = @collection
 			@listenTo @expenses, 'sync', @graph
 
-		daysBetween: (start, end) ->
-			a = start.getTime()
-			b = end.getTime()
-			return (b - a)/(1000*60*60*24)
-
 		normalize: ->
 			data = []
-			days = @daysBetween(@expenses.start, @expenses.end)
+			days = dateUtil.daysBetween(@expenses.start, @expenses.end)
 			xCoords = for day in [1..days]
 				d = new Date(@expenses.start.toISOString())
 				d.setUTCDate(d.getUTCDate() + day - 1)
