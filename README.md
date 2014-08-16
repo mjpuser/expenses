@@ -16,6 +16,7 @@ To index on riak 1.4.8:
 * set schema for expenses:
 * search-cmd set-schema expense config/riak-schema.erl
 * search-cmd install expense
+* search-cmd index expense (if you need to index already stored documents)
 
 
 Proposal for serializing search query
