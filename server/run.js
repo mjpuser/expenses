@@ -9,6 +9,7 @@ pipeline.on('handle', function(promise) {
 	var options = {
 		method: 'GET',
 		hostname: 'expenses',
+		port: 8000,
 		path: '/db/solr/' + entity + '/select' + this.url.search
 	}
 	http.request(options, function(res) {
