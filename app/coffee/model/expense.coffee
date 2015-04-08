@@ -4,7 +4,7 @@ define [
 	FormModel
 ) ->
 	ExpenseModel = FormModel.extend
-		urlRoot: '/db/buckets/expense/keys'
+		urlRoot: '/db/types/map/buckets/expense/keys'
 
 		fields:
 			amount:

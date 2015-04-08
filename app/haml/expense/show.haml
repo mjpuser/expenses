@@ -13,16 +13,14 @@
 	- if(collection.models.length) {
 	%thead
 		%tr
-			:for attr, value in collection.models[0].attributes
-				:if attr != 'id'
-					%th= attr.capitalize()
+			:for field in ['date', 'category', 'name', 'amount']
+				%th= field.capitalize()
 			%th.controls
 	%tbody
 		:for model in collection.models
 			%tr.expense
-				:for attr, value in model.attributes
-					:if attr != 'id'
-						%td{ class: "attr #{attr}", data-name: "#{attr}" }= value
+				:for field in ['date', 'category', 'name', 'amount']
+					%td{ class: "attr #{field}", data-name: "#{field}" }= model.get(field)
 				%td.controls
 					%button.save.tiny{ data-id: "#{model.get('id')}" } Save
 					%button.delete.tiny.alert{ data-id: "#{model.get('id')}" } X
